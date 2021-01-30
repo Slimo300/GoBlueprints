@@ -56,18 +56,22 @@ var upgrader = &websocket.Upgrader{ReadBufferSize: socketBufferSize,
 	WriteBufferSize: socketBufferSize}
 
 func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+
+	// Upgrading connection to TLS
 	socket, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
 		log.Fatal("ServeHTTP:", err)
 		return
 	}
 
+	// Getting auth cookie
 	authCookie, err := req.Cookie("auth")
 	if err != nil {
 		log.Fatal("Failed to get auth cookie", err)
 		return
 	}
 
+	// Creating a client object to represent a user in a room
 	client := &client{
 		socket:   socket,
 		send:     make(chan *message, messageBufferSize),
