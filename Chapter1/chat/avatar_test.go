@@ -48,7 +48,7 @@ func TestFileSystemAvatar(t *testing.T) {
 	ioutil.WriteFile(filename, []byte{}, 0777)
 	defer os.Remove(filename)
 
-	var fileSystemAvatar fileSystemAvatar
+	var fileSystemAvatar FileSystemAvatar
 	client := new(client)
 	client.userData = map[string]interface{}{"userid": "abc"}
 	url, err := fileSystemAvatar.GetAvatarURL(client)
