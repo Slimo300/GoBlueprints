@@ -53,8 +53,8 @@ func setupTwitterAuth() {
 	var ts struct {
 		ConsumerKey    string `env:"SP_TWITTER_KEY,required"`
 		ConsumerSecret string `env:"SP_TWITTER_SECRET,required"`
-		AccessToken    string `env:"SP_TWITTER_ACCESSTOKEN,required"`
-		AccessSecret   string `env:"SP_TWITTER_ACCESSSECRET,required"`
+		AccessToken    string `env:"SP_TWITTER_ACCESS_KEY,required"`
+		AccessSecret   string `env:"SP_TWITTER_ACCESS_SECRET,required"`
 	}
 
 	if err := envdecode.Decode(&ts); err != nil {
@@ -148,4 +148,29 @@ func readFromTwitter(votes chan<- string) {
 			}
 		}
 	}
+}
+
+func startTwitterStream(stopchan <-chan struct{}, votes chan<- string) <-chan struct{} {
+
+	stoppedchan := make(chan struct{}, 1)
+
+	go func() {
+		defer func() {
+			stoppedchan <- struct{}{}
+		}()
+		for {
+			select {
+			case <-stopchan:
+				log.Println("stopping Twitter...")
+				return
+			default:
+				log.Println("Querying Twitter...")
+				readFromTwitter(votes)
+				log.Println("  (waiting)")
+				time.Sleep(10 * time.Second) // wait before reconnecting
+			}
+		}
+	}()
+	return stoppedchan
+
 }
