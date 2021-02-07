@@ -37,3 +37,5 @@ func loadOptions() ([]string, error) {
 	iter.Close()
 	return options, iter.Err()
 }
+
+func main() {}
