@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"io"
 	"log"
@@ -14,7 +15,7 @@ import (
 
 	"github.com/joeshaw/envdecode"
 
-	"github.com/garyburd/go-oauth/oauth"
+	"github.com/matryer/go-oauth/oauth"
 )
 
 var conn net.Conn
@@ -90,9 +91,10 @@ func makeRequest(req *http.Request, params url.Values) (*http.Response, error) {
 	})
 
 	formEnc := params.Encode()
-	req.Header.Set("Content-Type", "application/x-www-form- urlencoded")
-	req.Header.Set("Content-length", strconv.Itoa(len(formEnc)))
+	// Zadziałało po zmianie kolejności ustawiania wartości headera HTTP :(((((
 	req.Header.Set("Authorization", authClient.AuthorizationHeader(creds, "POST", req.URL, params))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-length", strconv.Itoa(len(formEnc)))
 	return httpClient.Do(req)
 }
 
@@ -108,6 +110,11 @@ func readFromTwitter(votes chan<- string) {
 		return
 	}
 
+	hashtags := make([]string, len(options))
+	for i := range options {
+		hashtags[i] = "#" + strings.ToLower(options[i])
+	}
+
 	u, err := url.Parse("https://stream.twitter.com/1.1/statuses/filter.json")
 	if err != nil {
 		log.Println("creating filter request failed:", err)
@@ -116,7 +123,7 @@ func readFromTwitter(votes chan<- string) {
 
 	query := make(url.Values)
 
-	query.Set("track", strings.Join(options, ","))
+	query.Set("track", strings.Join(hashtags, ","))
 
 	req, err := http.NewRequest("POST", u.String(), strings.NewReader(query.Encode()))
 	if err != nil {
@@ -127,6 +134,16 @@ func readFromTwitter(votes chan<- string) {
 	resp, err := makeRequest(req, query)
 	if err != nil {
 		log.Println("making request failed:", err)
+		return
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		// this is a nice way to see what the error actually is:
+		s := bufio.NewScanner(resp.Body)
+		s.Scan()
+		log.Println(s.Text())
+		log.Println(hashtags)
+		log.Println("StatusCode =", resp.StatusCode)
 		return
 	}
 

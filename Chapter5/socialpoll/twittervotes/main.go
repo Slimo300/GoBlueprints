@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/bitly/go-nsq"
+	"github.com/nsqio/go-nsq"
 
 	"gopkg.in/mgo.v2"
 )
