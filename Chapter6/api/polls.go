@@ -9,10 +9,11 @@ import (
 )
 
 type poll struct {
-	ID      bson.ObjectId `bson:"_id" json:"id"`
-	Title   string        `json:"title"`
-	Options []string      `json:"options"`
-	APIKey  string
+	ID      bson.ObjectId  `bson:"_id" json:"id"`
+	Title   string         `json:"title"`
+	Options []string       `json:"options"`
+	APIKey  string         `json:"api_key"`
+	Results map[string]int `json:"results"`
 }
 
 func (s *Server) handlePolls(w http.ResponseWriter, r *http.Request) {
