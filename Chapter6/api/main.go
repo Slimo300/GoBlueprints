@@ -58,6 +58,8 @@ func main() {
 		mongo = flag.String("mongo", "localhost", "mongodb address")
 	)
 
+	flag.Parse()
+
 	log.Println("Dialing mongo", *mongo)
 
 	db, err := mgo.Dial(*mongo)
@@ -75,6 +77,6 @@ func main() {
 	mux.HandleFunc("/polls/", withCORS(withAPIKey(s.handlePolls)))
 
 	log.Println("Starting web server on", *addr)
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(*addr, mux)
 	log.Println("Stopping...")
 }
