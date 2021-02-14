@@ -1,0 +1,4 @@
+Chapter5/db/
+nsqd.dat
+votes.diskqueue.meta.dat
+votes:counter.diskqueue.meta.dat
