@@ -16,11 +16,11 @@ var APIKey string
 
 // Place is a struct for storing data about specific places
 type Place struct {
-	*googleGeometry `json:"geometry"`
-	Name            string         `json:"name"`
-	Icon            string         `json:"icon"`
-	Photos          []*googlePhoto `json:"photos"`
-	Vicinity        string         `json:"vicinity"`
+	GoogleGeometry *googleGeometry `json:"geometry"`
+	Name           string          `json:"name"`
+	Icon           string          `json:"icon"`
+	Photos         []*googlePhoto  `json:"photos"`
+	Vicinity       string          `json:"vicinity"`
 }
 
 type googleResponse struct {
@@ -28,7 +28,7 @@ type googleResponse struct {
 }
 
 type googleGeometry struct {
-	*googleLocation `json:"location"`
+	GoogleLocation *googleLocation `json:"location"`
 }
 
 type googleLocation struct {
@@ -50,8 +50,8 @@ func (p *Place) Public() interface{} {
 		"icon":     p.Icon,
 		"photos":   p.Photos,
 		"vicinity": p.Vicinity,
-		"lat":      p.Lat,
-		"lng":      p.Lng,
+		"lat":      p.GoogleGeometry.GoogleLocation.Lat,
+		"lng":      p.GoogleGeometry.GoogleLocation.Lng,
 	}
 }
 
