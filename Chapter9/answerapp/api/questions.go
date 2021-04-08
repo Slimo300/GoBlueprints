@@ -1,4 +1,4 @@
-package answerapp
+package main
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 
 type Question struct {
 	Key          *datastore.Key `json:"id" datastore:"-"`
-	CTime        time.Time      `json:"created"`
-	Question     string         `json:"question"`
-	User         UserCard       `json:"answers_count"`
-	AnswersCount int            `json:"answer_count"`
+	CTime        time.Time      `json:"created" datastore:",noindex"`
+	Question     string         `json:"question" datastore:",noindex"`
+	User         UserCard       `json:"user"`
+	AnswersCount int            `json:"answers_count"`
 }
 
 // OK is a method checking wherther given question fulfill its
@@ -87,4 +87,18 @@ func TopQuestions(ctx context.Context) ([]*Question, error) {
 	}
 
 	return questions, nil
+}
+
+type QuestionCard struct {
+	Key      *datastore.Key `json:"id" datastore:",noindex"`
+	Question string         `json:"question" datastore:",noindex"`
+	User     UserCard       `json:"user" datastore:",noindex"`
+}
+
+func (q Question) Card() QuestionCard {
+	return QuestionCard{
+		Key:      q.Key,
+		Question: q.Question,
+		User:     q.User,
+	}
 }

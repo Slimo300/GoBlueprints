@@ -11,6 +11,9 @@ func handleHello(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", handleHello)
+	http.HandleFunc("/api/questions/", handleQuestions)
+	http.HandleFunc("/api/answers/", handleAnswers)
+	http.HandleFunc("/api/votes/", handleVotes)
 
 	http.ListenAndServe(":8080", nil)
 }
