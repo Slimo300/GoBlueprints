@@ -84,3 +84,19 @@ func (a *Answer) Put(ctx context.Context) error {
 	}
 	return nil
 }
+
+func GetAnswers(ctx context.Context, questionKey *datastore.Key) ([]*Answer, error) {
+	var answers []*Answer
+
+	answerKeys, err := datastore.NewQuery("Answer").Ancestor(questionKey).Order("-CTime").GetAll(ctx, &answers)
+
+	for i, answer := range answers {
+		answer.Key = answerKeys[i]
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return answers, nil
+}
