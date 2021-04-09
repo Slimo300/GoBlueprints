@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 )
 
 func handleAnswers(w http.ResponseWriter, r *http.Request) {
-	switch R.Method {
+	switch r.Method {
 	case "GET":
 		handleAnswersGet(w, r)
 	case "POST":
@@ -48,7 +48,7 @@ func handleAnswerCreate(w http.ResponseWriter, r *http.Request) {
 	}
 	questionKey, err := datastore.DecodeKey(newAnswer.QuestionID)
 	if err != nil {
-		respondErr(ctx, w, err, http.StatusBadRequest)
+		respondErr(ctx, w, r, err, http.StatusBadRequest)
 		return
 	}
 	err = newAnswer.OK()
@@ -60,7 +60,7 @@ func handleAnswerCreate(w http.ResponseWriter, r *http.Request) {
 	answer := newAnswer.Answer
 	user, err := UserFromAEUser(ctx)
 	if err != nil {
-		respondErr(crx, w, r, err, http.StatusBadRequest)
+		respondErr(ctx, w, r, err, http.StatusBadRequest)
 		return
 	}
 	answer.User = user.Card()

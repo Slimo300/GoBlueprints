@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"errors"
@@ -16,7 +16,7 @@ func handleVotes(w http.ResponseWriter, r *http.Request) {
 	handleVote(w, r)
 }
 
-func hanldeVote(w http.ResponseWriter, r *http.Request) {
+func handleVote(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 	var newVote struct {
 		AnswerID string `json:"answer_id"`

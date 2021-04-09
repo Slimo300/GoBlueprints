@@ -1,10 +1,10 @@
-package main
+package api
 
 import (
 	"net/http"
 
-	"github.com/golang/appengine/datastore"
 	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
 )
 
 func handleQuestions(w http.ResponseWriter, r *http.Request) {
@@ -52,4 +52,14 @@ func handleQuestionsGet(w http.ResponseWriter, r *http.Request, questionID strin
 		return
 	}
 	respond(ctx, w, r, question, http.StatusOK)
+}
+
+func handleTopQuestions(w http.ResponseWriter, r *http.Request) {
+	ctx := appengine.NewContext(r)
+	questions, err := TopQuestions(ctx)
+	if err != nil {
+		respondErr(ctx, w, r, err, http.StatusInternalServerError)
+		return
+	}
+	respond(ctx, w, r, questions, http.StatusOK)
 }

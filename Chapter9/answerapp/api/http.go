@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"bytes"
@@ -64,7 +64,7 @@ func pathParams(r *http.Request, pattern string) map[string]string {
 	pathSegs := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 
 	for i, seg := range strings.Split(strings.Trim(pattern, "/"), "/") {
-		if i > len(pathSegs-1) {
+		if i > len(pathSegs)-1 {
 			return params
 		}
 		params[seg] = pathSegs[i]
