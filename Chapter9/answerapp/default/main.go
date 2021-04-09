@@ -1,3 +1,3 @@
-package defaultmodule
+package main
 
 func init() {}

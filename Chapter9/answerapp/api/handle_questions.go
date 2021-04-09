@@ -32,6 +32,12 @@ func handleQuestionCreate(w http.ResponseWriter, r *http.Request) {
 		respondErr(ctx, w, r, err, http.StatusInternalServerError)
 		return
 	}
+	err = q.Create(ctx)
+	if err != nil {
+		respondErr(ctx, w, r, err, http.StatusInternalServerError)
+		return
+	}
+
 	respond(ctx, w, r, q, http.StatusCreated)
 }
 

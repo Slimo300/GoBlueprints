@@ -1,15 +1,17 @@
-package web
+package main
 
 import (
 	"html/template"
+	"log"
 	"net/http"
+	"os"
 
 	"golang.org/x/net/context"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/user"
 )
 
-func init() {
+func main() {
 	tmpl, err := template.ParseGlob("templates/*.tmpl.html")
 	if err != nil {
 		http.Handle("/", errHandler(err.Error(), http.StatusInternalServerError))
@@ -17,6 +19,16 @@ func init() {
 	}
 	http.Handle("/questions/", templateHandler(tmpl, "question"))
 	http.Handle("/", templateHandler(tmpl, "index"))
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+	log.Printf("Listening on port %s", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func templateHandler(tmpl *template.Template, name string) http.Handler {
