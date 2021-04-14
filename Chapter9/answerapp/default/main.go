@@ -1,3 +1,3 @@
-package main
+package defaultmodule
 
-func init() {}
+func main() {}

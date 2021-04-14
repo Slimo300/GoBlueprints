@@ -3,9 +3,8 @@ package meander_test
 import (
 	"testing"
 
+	"github.com/Slimo300/GoBlueprints/Chapter7/meander"
 	"github.com/cheekybits/is"
-
-	meander "."
 )
 
 func TestCostValues(t *testing.T) {

@@ -1,2 +1,2 @@
 runtime: go115
-service: web
+app_engine_apis: true
