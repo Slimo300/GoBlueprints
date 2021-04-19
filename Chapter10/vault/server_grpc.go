@@ -1,8 +1,8 @@
 package vault
 
 import (
+	"github.com/Slimo300/GoBlueprints/Chapter10/vault/pb"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
-	"github.com/matryer/goblueprints/chapter10/vault/pb"
 	"golang.org/x/net/context"
 )
 

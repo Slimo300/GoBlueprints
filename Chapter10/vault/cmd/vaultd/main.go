@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -13,10 +12,6 @@ import (
 
 	"github.com/Slimo300/GoBlueprints/Chapter10/vault"
 	"github.com/Slimo300/GoBlueprints/Chapter10/vault/pb"
-	"github.com/go-kit/kit/transport/grpc"
-	"github.com/matryer/goblueprints/chapter10/vault"
-	"github.com/matryer/goblueprints/chapter10/vault/pb"
-	"github.com/matryer/goblueprints/chapter11/vault"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
