@@ -9,9 +9,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/Slimo300/GoBlueprints/Chapter10/vault"
 	"github.com/Slimo300/GoBlueprints/Chapter10/vault/pb"
+	"github.com/juju/ratelimit"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -33,6 +35,8 @@ func main() {
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 		errChan <- fmt.Errorf("%s", <-c)
 	}()
+
+	rlbucket := ratelimit.NewBucket(1*time.Second, 5)
 
 	hashEndpoint := vault.MakeHashEndpoint(srv)
 	validateEndpoint := vault.MakeValidateEndpoint(srv)
