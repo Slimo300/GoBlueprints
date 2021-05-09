@@ -60,6 +60,7 @@ func pop(s []string) (string, []string) {
 func hash(ctx context.Context, service vault.Service, password string) {
 	h, err := service.Hash(ctx, password)
 	if err != nil {
+		log.Println("Error")
 		log.Fatalln(err.Error())
 	}
 	fmt.Println(h)

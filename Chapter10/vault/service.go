@@ -3,6 +3,7 @@ package vault
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
@@ -85,6 +86,7 @@ func MakeHashEndpoint(srv Service) endpoint.Endpoint {
 		req := request.(hashRequest)
 		v, err := srv.Hash(ctx, req.Password)
 		if err != nil {
+			log.Println(err.Error(), " MakeHashEndpoint")
 			return hashResponse{v, err.Error()}, nil
 		}
 		return hashResponse{v, ""}, nil
@@ -111,6 +113,7 @@ func (e Endpoints) Hash(ctx context.Context, password string) (string, error) {
 	req := hashRequest{Password: password}
 	resp, err := e.HashEndpoint(ctx, req)
 	if err != nil {
+		log.Println(err.Error())
 		return "", err
 	}
 	hashResp := resp.(hashResponse)

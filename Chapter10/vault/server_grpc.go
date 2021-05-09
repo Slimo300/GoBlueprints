@@ -16,7 +16,7 @@ func NewGRPCServer(ctx context.Context, endpoints Endpoints) pb.VaultServer {
 		hash: grpctransport.NewServer(
 			endpoints.HashEndpoint,
 			DecodeGRPCHashRequest,
-			EncodeGRPCHashRequest,
+			EncodeGRPCHashResponse,
 		),
 		validate: grpctransport.NewServer(
 			endpoints.ValidateEndpoint,
