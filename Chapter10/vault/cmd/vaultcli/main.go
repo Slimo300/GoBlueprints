@@ -10,8 +10,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/Slimo300/GoBlueprints/Chapter10/vault"
-	grpcclient "github.com/Slimo300/GoBlueprints/Chapter10/vault/client/grpc"
+	"github.com/Slimo300/GoBlueprints/Chapter10/vault/pb"
 )
 
 func main() {
@@ -28,7 +27,8 @@ func main() {
 	}
 	defer conn.Close()
 
-	vaultService := grpcclient.New(conn)
+	//vaultService := grpcclient.New(conn)
+	client := pb.NewVaultClient(conn)
 	args := flag.Args()
 	var cmd string
 	cmd, args = pop(args)
@@ -37,12 +37,12 @@ func main() {
 	case "hash":
 		var password string
 		password, args = pop(args)
-		hash(ctx, vaultService, password)
+		hash(ctx, client, password)
 	case "validate":
 		var password, hash string
 		password, args = pop(args)
 		hash, args = pop(args)
-		validate(ctx, vaultService, password, hash)
+		validate(ctx, client, password, hash)
 	default:
 		log.Fatalln("unknown command", cmd)
 	}
@@ -57,22 +57,21 @@ func pop(s []string) (string, []string) {
 	return s[0], s[1:]
 }
 
-func hash(ctx context.Context, service vault.Service, password string) {
-	h, err := service.Hash(ctx, password)
+func hash(ctx context.Context, client pb.VaultClient, password string) {
+	h, err := client.Hash(ctx, &pb.HashRequest{Password: password})
 	if err != nil {
-		log.Println("Error")
 		log.Fatalln(err.Error())
 	}
 	fmt.Println(h)
 }
 
-func validate(ctx context.Context, service vault.Service, password, hash string) {
-	valid, err := service.Validate(ctx, password, hash)
+func validate(ctx context.Context, client pb.VaultClient, password, hash string) {
+	valid, err := client.Validate(ctx, &pb.ValidateRequest{Password: password, Hash: hash})
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
 
-	if !valid {
+	if !valid.Valid {
 		fmt.Println("invalid")
 		os.Exit(1)
 	}
