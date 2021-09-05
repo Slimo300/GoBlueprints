@@ -3,7 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"os"
-	"path/filepath"
+	"path"
 	"testing"
 
 	gomniauthtest "github.com/stretchr/gomniauth/test"
@@ -27,7 +27,7 @@ func TestAuthAvatar(t *testing.T) {
 	if err != nil {
 		t.Error("AuthAvatar.GetAvatarURL should return no error when value present")
 	}
-	if url != testUrl {
+	if url != testURL {
 		t.Error("AuthAvatar.GetAvatarURL should return correct URL")
 	}
 }
@@ -42,7 +42,7 @@ func TestGravatarAvatar(t *testing.T) {
 	if url != "//www.gravatar.com/avatar/abc" {
 		t.Errorf("GravatarAvatar.GetAvatarURL wrongly returned %s", url)
 	}
-	}
+}
 func TestFileSystemAvatar(t *testing.T) {
 	// make a test avatar file
 	filename := path.Join("avatars", "abc.jpg")
@@ -57,3 +57,4 @@ func TestFileSystemAvatar(t *testing.T) {
 	if url != "/avatars/abc.jpg" {
 		t.Errorf("FileSystemAvatar.GetAvatarURL wrongly returned %s", url)
 	}
+}
