@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"../trace"
+	"github.com/Slimo300/GoBlueprints/Chapter1-3/trace"
 
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/objx"
